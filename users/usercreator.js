@@ -1,6 +1,7 @@
 function createUser(execlib, ParentUser) {
   'use strict';
   var lib = execlib.lib,
+    q = lib.q,
     execSuite = execlib.execSuite,
     taskRegistry = execSuite.taskRegistry;
 
@@ -10,8 +11,10 @@ function createUser(execlib, ParentUser) {
 
   function User(prophash) {
     ParentUser.call(this, prophash);
-    this.name = prophash.name;
-    console.log('Cluster User spawned', this.name, prophash);
+    this.name = null;
+    if (prophash && prophash.profile && prophash.profile.role === 'cluster') {
+      this.name = prophash.name;
+    }
   }
   
   ParentUser.inherit(User, require('../methoddescriptors/user'), [/*visible state fields here*/]/*or a ctor for StateStream filter*/, require('../visiblefields/user'));
@@ -21,7 +24,7 @@ function createUser(execlib, ParentUser) {
   };
 
   User.prototype.onSpawned = function (sink) {
-    if (sink) {
+    if (this.name && sink) {
       taskRegistry.run('readState', {
         state: taskRegistry.run('materializeState', {
           sink: sink
@@ -34,12 +37,12 @@ function createUser(execlib, ParentUser) {
   };
 
   User.prototype.onAccessInfo = function (accessinfo) {
-    if (!(accessinfo && accessinfo.ipaddress && accessinfo.port && accessinfo.token)) {
+    if (!(accessinfo && accessinfo.ipaddress && accessinfo.port && accessinfo.tokens && accessinfo.tokens.user)) {
       return;
     }
     taskRegistry.run('acquireSink', {
       connectionString: 'ws://'+accessinfo.ipaddress+':'+accessinfo.port,
-      identity: {ip: {name: this.name, role: 'user', token: accessinfo.token}},
+      identity: {ip: {name: this.name, role: 'user', token: accessinfo.tokens.user}},
       onSink: this.onSelfClusterSink.bind(this),
       onCannotConnect: console.error.bind(console, 'ooops'),//d.reject.bind(d),
       singleshot: true
@@ -47,7 +50,6 @@ function createUser(execlib, ParentUser) {
   };
 
   User.prototype.onSelfClusterSink = function (sink) {
-    console.log('onSelfClusterSink', sink);
     if (!this.destroyed) {
       sink.destroy();
       return;
