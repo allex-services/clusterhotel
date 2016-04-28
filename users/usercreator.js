@@ -37,7 +37,10 @@ function createUser(execlib, ParentUser) {
   };
 
   User.prototype.onAccessInfo = function (accessinfo) {
-    if (!(accessinfo && accessinfo.ipaddress && accessinfo.port && accessinfo.tokens && accessinfo.tokens.user)) {
+    if (!this.destroyed) {
+      return;
+    }
+    if (!(this.name && accessinfo && accessinfo.ipaddress && accessinfo.port && accessinfo.tokens && accessinfo.tokens.user)) {
       return;
     }
     taskRegistry.run('acquireSink', {
