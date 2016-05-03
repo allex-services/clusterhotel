@@ -43,13 +43,7 @@ function createUser(execlib, ParentUser) {
     if (!(this.name && accessinfo && accessinfo.ipaddress && accessinfo.port && accessinfo.tokens && accessinfo.tokens.user)) {
       return;
     }
-    taskRegistry.run('acquireSink', {
-      connectionString: 'ws://'+accessinfo.ipaddress+':'+accessinfo.port,
-      identity: {ip: {name: this.name, role: 'user', token: accessinfo.tokens.user}},
-      onSink: this.onSelfClusterSink.bind(this),
-      onCannotConnect: console.error.bind(console, 'ooops'),//d.reject.bind(d),
-      singleshot: true
-    });
+    this.__service.sinkMaintainers.goAcquire(this.name, 'ws://'+accessinfo.ipaddress+':'+accessinfo.port, {ip: {name: this.name, role: 'user', token: accessinfo.tokens.user}});
   };
 
   User.prototype.onSelfClusterSink = function (sink) {

@@ -1,7 +1,10 @@
 function createClusterUsersService(execlib, ParentServicePack) {
   'use strict';
   var ParentService = ParentServicePack.Service,
-    dataSuite = execlib.dataSuite;
+    dataSuite = execlib.dataSuite,
+    lib = execlib.lib,
+    q = lib.q,
+    sinknamemaintenance = require('./sinknamemaintenancecreator')(execlib);
 
   function factoryCreator(parentFactory) {
     return {
@@ -13,15 +16,26 @@ function createClusterUsersService(execlib, ParentServicePack) {
 
   function ClusterUsersService(prophash) {
     ParentService.call(this, prophash);
+    this.sinkMaintainers = new sinknamemaintenance.SinkMaintainterMap(this.onRemoteSink.bind(this));
   }
   
   ParentService.inherit(ClusterUsersService, factoryCreator, require('./storagedescriptor'));
   
   ClusterUsersService.prototype.__cleanUp = function() {
+    if (this.sinkMaintainers) {
+      lib.containerDestroyAll(this.sinkMaintainers);
+      this.sinkMaintainers.destroy();
+    }
+    this.sinkMaintainers = null;
     ParentService.prototype.__cleanUp.call(this);
   };
   ClusterUsersService.prototype.createStorage = function(storagedescriptor) {
     return ParentService.prototype.createStorage.call(this, storagedescriptor);
+  };
+  ClusterUsersService.prototype.onRemoteSink = function (sink, sinkname) {
+    if (sink) {
+      this._onStaticallyStartedSubService(q.defer(), sinkname+'_gateway', sink);
+    }
   };
   return ClusterUsersService;
 }
