@@ -14,14 +14,22 @@ function createSinkNameMaintenance(execlib) {
     this.who = null;
     this.sink = null;
     this.task = null;
+    this.sinkDestroyedListener = null;
   }
   SinkNameMaintainer.prototype.destroy = function () {
+    this.purgeSinkDestroyedListener();
     this.purgeTask();
     this.sink = null;
     this.who = null;
     this.where = null;
     this.how = null;
     this.sinkcb = null;
+  };
+  SinkNameMaintainer.prototype.purgeSinkDestroyedListener = function () {
+    if (this.sinkDestroyedListener) {
+      this.sinkDestroyedListener.destroy();
+    }
+    this.sinkDestroyedListener = null;
   };
   SinkNameMaintainer.prototype.purgeTask = function () {
     if (this.task) {
@@ -38,13 +46,20 @@ function createSinkNameMaintenance(execlib) {
     this.who = who;
     this.purgeTask();
     if (this.sink) {
+      if (!this.sinkDestroyedListener) {
+        this.sinkDestroyedListener = this.sink.destroyed.attach(this.onSink.bind(this, null));
+      }
       return;
     }
     this.createTask();
   };
   SinkNameMaintainer.prototype.onSink = function (sink) {
+    this.purgeSinkDestroyedListener();
     this.sink = sink;
     this.sinkcb(sink);
+    if (!sink && !this.task) {
+      this.createTask();
+    }
   };
   SinkNameMaintainer.prototype.createTask = function () {
     if (this.how === null) {
