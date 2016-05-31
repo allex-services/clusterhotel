@@ -65,6 +65,10 @@ function createSinkNameMaintenance(execlib) {
     if (this.how === null) {
       return;
     }
+    if (this.task) {
+      console.log('already have task', this.where, this.who);
+      return;
+    }
     switch (this.how) {
       case 'acquire':
         this.createAcquireSinkTask();
@@ -87,7 +91,7 @@ function createSinkNameMaintenance(execlib) {
   };
   SinkNameMaintainer.prototype.onAcquireFail = function () {
     this.purgeTask();
-    this.createTask();
+    lib.runNext(this.createTask.bind(this), lib.intervals.Second);
   };
 
   function SinkMaintainterMap(sinkcb) {
