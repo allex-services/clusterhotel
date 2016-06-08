@@ -38,7 +38,7 @@ function createSinkNameMaintenance(execlib) {
     this.task = null;
   };
   SinkNameMaintainer.prototype.go = function (how, where, who) {
-    if (lib.equals(this.where, where) && lib.equals(this.who, who)) {
+    if (lib.isIdentical(this.where, where) && lib.isIdentical(this.who, who)) {
       return;
     }
     this.how = how;
