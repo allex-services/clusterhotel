@@ -1,7 +1,6 @@
-function createClusterUsersService(execlib, ParentServicePack) {
+function createClusterUsersService(execlib, ParentService) {
   'use strict';
-  var ParentService = ParentServicePack.Service,
-    dataSuite = execlib.dataSuite,
+  var dataSuite = execlib.dataSuite,
     lib = execlib.lib,
     q = lib.q,
     sinknamemaintenance = require('./sinknamemaintenancecreator')(execlib);
