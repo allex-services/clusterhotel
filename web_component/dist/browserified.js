@@ -1,0 +1,111 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+ALLEX.execSuite.registry.registerClientSide('allex_clusterusersservice',require('./clientside')(ALLEX, ALLEX.execSuite.registry.getClientSide('allex_usersservice')));
+
+},{"./clientside":2}],2:[function(require,module,exports){
+function createClientSide(execlib) {
+  'use strict';
+  var execSuite = execlib.execSuite,
+  allex_usersserviceServicePack = execSuite.registry.get('allex_usersservice'),
+  ParentServicePack = allex_usersserviceServicePack;
+
+  return {
+    SinkMap: require('./sinkmapcreator')(execlib, ParentServicePack)
+  };
+}
+
+module.exports = createClientSide;
+
+},{"./sinkmapcreator":5}],3:[function(require,module,exports){
+module.exports = {
+};
+
+},{}],4:[function(require,module,exports){
+arguments[4][3][0].apply(exports,arguments)
+},{"dup":3}],5:[function(require,module,exports){
+function sinkMapCreator(execlib, ParentSinkMap) {
+  'use strict';
+  var sinkmap = new (execlib.lib.Map);
+  sinkmap.add('service', require('./sinks/servicesinkcreator')(execlib, ParentSinkMap.get('service')));
+  sinkmap.add('user', require('./sinks/usersinkcreator')(execlib, ParentSinkMap.get('user')));
+  sinkmap.add('monitor', require('./sinks/monitorsinkcreator')(execlib, ParentSinkMap.get('monitor')));
+  
+  return sinkmap;
+}
+
+module.exports = sinkMapCreator;
+
+},{"./sinks/monitorsinkcreator":6,"./sinks/servicesinkcreator":7,"./sinks/usersinkcreator":8}],6:[function(require,module,exports){
+function createMonitorSink(execlib, ParentSink) {
+  'use strict';
+  if (!ParentSink) {
+    ParentSink = execlib.execSuite.registry.get('.').SinkMap.get('user');
+  }
+
+  function MonitorSink(prophash, client) {
+    ParentSink.call(this, prophash, client);
+  }
+  
+  ParentSink.inherit(MonitorSink, require('../methoddescriptors/user'), require('../visiblefields/user'),require('../storagedescriptor'));
+  MonitorSink.prototype.__cleanUp = function () {
+    ParentSink.prototype.__cleanUp.call(this);
+  };
+  return MonitorSink;
+}
+
+module.exports = createMonitorSink;
+
+},{"../methoddescriptors/user":4,"../storagedescriptor":9,"../visiblefields/user":11}],7:[function(require,module,exports){
+function createServiceSink(execlib, ParentSink) {
+  'use strict';
+  if (!ParentSink) {
+    ParentSink = execlib.execSuite.registry.get('.').SinkMap.get('user');
+  }
+
+  function ServiceSink(prophash, client) {
+    ParentSink.call(this, prophash, client);
+  }
+  
+  ParentSink.inherit(ServiceSink, require('../methoddescriptors/serviceuser'), require('../visiblefields/serviceuser'),require('../storagedescriptor'));
+  ServiceSink.prototype.__cleanUp = function () {
+    ParentSink.prototype.__cleanUp.call(this);
+  };
+  return ServiceSink;
+}
+
+module.exports = createServiceSink;
+
+},{"../methoddescriptors/serviceuser":3,"../storagedescriptor":9,"../visiblefields/serviceuser":10}],8:[function(require,module,exports){
+function createUserSink(execlib, ParentSink) {
+  'use strict';
+  if (!ParentSink) {
+    ParentSink = execlib.execSuite.registry.get('.').SinkMap.get('user');
+  }
+
+  function UserSink(prophash, client) {
+    ParentSink.call(this, prophash, client);
+  }
+  
+  ParentSink.inherit(UserSink, require('../methoddescriptors/user'), require('../visiblefields/user'),require('../storagedescriptor'));
+  UserSink.prototype.__cleanUp = function () {
+    ParentSink.prototype.__cleanUp.call(this);
+  };
+  return UserSink;
+}
+
+module.exports = createUserSink;
+
+},{"../methoddescriptors/user":4,"../storagedescriptor":9,"../visiblefields/user":11}],9:[function(require,module,exports){
+module.exports = {
+  record:{
+    fields:[{
+      name: 'field0'
+    }]
+  }
+};
+
+},{}],10:[function(require,module,exports){
+module.exports = [];
+
+},{}],11:[function(require,module,exports){
+arguments[4][10][0].apply(exports,arguments)
+},{"dup":10}]},{},[1]);
