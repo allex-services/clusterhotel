@@ -33,7 +33,7 @@ function createClusterUsersService(execlib, ParentService) {
   };
   ClusterUsersService.prototype.onRemoteSink = function (sink, sinkname) {
     if (sink) {
-      this._onStaticallyStartedSubService(q.defer(), sinkname+'_gateway', sink);
+      this._onStaticallyStartedSubService(sinkname+'_gateway', sink);
     }
   };
   return ClusterUsersService;
