@@ -81,6 +81,7 @@ function createSinkNameMaintenance(execlib) {
     }
   };
   SinkNameMaintainer.prototype.createAcquireSinkTask = function () {
+    console.log('acquireSink to', this.where, 'as', this.who);
     this.task = taskRegistry.run('acquireSink', {
       connectionString: this.where,
       identity: this.who,
