@@ -3,7 +3,8 @@ function createUser(execlib, ParentUser) {
   var lib = execlib.lib,
     q = lib.q,
     execSuite = execlib.execSuite,
-    taskRegistry = execSuite.taskRegistry;
+    taskRegistry = execSuite.taskRegistry,
+    _magicroleending = 'cluster';
 
   if (!ParentUser) {
     ParentUser = execlib.execSuite.ServicePack.Service.prototype.userFactory.get('user');
@@ -12,7 +13,7 @@ function createUser(execlib, ParentUser) {
   function User(prophash) {
     ParentUser.call(this, prophash);
     this.name = null;
-    if (prophash && prophash.profile && prophash.profile.role === 'cluster') {
+    if (prophash && prophash.profile && prophash.role && prophash.profile.role.substr(-_magicroleending.length) === _magicroleending) {
       this.name = prophash.name;
     }
   }

@@ -8,7 +8,7 @@ function createMonitorUser(execlib, ParentUser) {
     ParentUser.call(this, prophash);
   }
   
-  ParentUser.inherit(MonitorUser, require('../methoddescriptors/user'), [/*visible state fields here*/]/*or a ctor for StateStream filter*/, require('../visiblefields/user'));
+  ParentUser.inherit(MonitorUser, require('../methoddescriptors/user'), [/^have.*_gateway$/]/*or a ctor for StateStream filter*/, require('../visiblefields/user'));
   MonitorUser.prototype.__cleanUp = function () {
     ParentUser.prototype.__cleanUp.call(this);
   };
