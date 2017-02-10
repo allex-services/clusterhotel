@@ -1,4 +1,4 @@
-function createClusterUsersService(execlib, ParentService) {
+function createClusterHotelService(execlib, ParentService) {
   'use strict';
   var dataSuite = execlib.dataSuite,
     lib = execlib.lib,
@@ -13,14 +13,14 @@ function createClusterUsersService(execlib, ParentService) {
     };
   }
 
-  function ClusterUsersService(prophash) {
+  function ClusterHotelService(prophash) {
     ParentService.call(this, prophash);
     this.sinkMaintainers = new sinknamemaintenance.SinkMaintainterMap(this.onRemoteSink.bind(this));
   }
   
-  ParentService.inherit(ClusterUsersService, factoryCreator, require('./storagedescriptor'));
+  ParentService.inherit(ClusterHotelService, factoryCreator, require('./storagedescriptor'));
   
-  ClusterUsersService.prototype.__cleanUp = function() {
+  ClusterHotelService.prototype.__cleanUp = function() {
     if (this.sinkMaintainers) {
       lib.containerDestroyAll(this.sinkMaintainers);
       this.sinkMaintainers.destroy();
@@ -28,15 +28,15 @@ function createClusterUsersService(execlib, ParentService) {
     this.sinkMaintainers = null;
     ParentService.prototype.__cleanUp.call(this);
   };
-  ClusterUsersService.prototype.createStorage = function(storagedescriptor) {
+  ClusterHotelService.prototype.createStorage = function(storagedescriptor) {
     return ParentService.prototype.createStorage.call(this, storagedescriptor);
   };
-  ClusterUsersService.prototype.onRemoteSink = function (sink, sinkname) {
+  ClusterHotelService.prototype.onRemoteSink = function (sink, sinkname) {
     if (sink) {
       this._onStaticallyStartedSubService(sinkname+'_gateway', sink);
     }
   };
-  return ClusterUsersService;
+  return ClusterHotelService;
 }
 
-module.exports = createClusterUsersService;
+module.exports = createClusterHotelService;

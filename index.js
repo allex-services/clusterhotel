@@ -3,10 +3,10 @@ function createServicePack(execlib) {
 
   return {
     service: {
-      dependencies: ['allex:users']
+      dependencies: ['allex:hotel']
     },
     sinkmap: {
-      dependencies: ['allex:users']
+      dependencies: ['allex:hotel']
     }
   };
 }

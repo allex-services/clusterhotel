@@ -1,1 +1,1 @@
-# ClusterUsersService
+# ClusterHotelService

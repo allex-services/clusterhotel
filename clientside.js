@@ -1,8 +1,8 @@
 function createClientSide(execlib) {
   'use strict';
   var execSuite = execlib.execSuite,
-  allex_usersserviceServicePack = execSuite.registry.get('allex_usersservice'),
-  ParentServicePack = allex_usersserviceServicePack;
+  allex_hotelserviceServicePack = execSuite.registry.get('allex_hotelservice'),
+  ParentServicePack = allex_hotelserviceServicePack;
 
   return {
     SinkMap: require('./sinkmapcreator')(execlib, ParentServicePack)

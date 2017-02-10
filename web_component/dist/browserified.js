@@ -1,12 +1,12 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-ALLEX.execSuite.registry.registerClientSide('allex_clusterusersservice',require('./clientside')(ALLEX, ALLEX.execSuite.registry.getClientSide('allex_usersservice')));
+ALLEX.execSuite.registry.registerClientSide('allex_clusterhotelservice',require('./clientside')(ALLEX, ALLEX.execSuite.registry.getClientSide('allex_hotelservice')));
 
 },{"./clientside":2}],2:[function(require,module,exports){
 function createClientSide(execlib) {
   'use strict';
   var execSuite = execlib.execSuite,
-  allex_usersserviceServicePack = execSuite.registry.get('allex_usersservice'),
-  ParentServicePack = allex_usersserviceServicePack;
+  allex_hotelserviceServicePack = execSuite.registry.get('allex_hotelservice'),
+  ParentServicePack = allex_hotelserviceServicePack;
 
   return {
     SinkMap: require('./sinkmapcreator')(execlib, ParentServicePack)
