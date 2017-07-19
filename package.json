@@ -1,6 +1,6 @@
 {
   "name": "allex_clusterhotelservice",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ClusterHotelService",
   "main": "index.js",
   "scripts": {
