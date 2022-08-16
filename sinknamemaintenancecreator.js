@@ -102,7 +102,7 @@ function createSinkNameMaintenance(execlib) {
   lib.inherit(SinkMaintainterMap, lib.Map);
   SinkMaintainterMap.prototype.destroy = function () {
     this.sinkcb = null;
-    lib.Map.destroy.call(this);
+    lib.Map.prototype.destroy.call(this);
   };
   SinkMaintainterMap.prototype.onSink = function (sinkname, sink) {
     this.sinkcb(sink, sinkname);
